@@ -19,6 +19,10 @@ class FiniteAutomaton:
             self.accept_states.add(state)
 
     def add_transition(self, from_state, to_state, symbol):
+        if not from_state or not to_state or not symbol:
+            print("Error: from_state, to_state, and symbol must all be non-null and non-empty.")
+            return 
+
         if from_state not in self.transitions:
             self.transitions[from_state] = {}
         if symbol not in self.transitions[from_state]:
