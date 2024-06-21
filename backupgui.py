@@ -26,21 +26,35 @@ def onClick():
     for row in entries:
         for entry in row:
             if not entry.get():
-                error_label.configure(text="Form must be filled")
+                error_label.configure(text="All fields must be filled.")
                 all_filled = False
                 break
         if not all_filled:
             break
-    
-    if all_filled:
-        error_label.configure(text="")
-        print("Start Data:", starter[0].get())
-        print("Final: ", starter[1].get())
-        for row in entries:
-            print(f"State: {row[0].get()}, TO State: {row[1].get()}, Symbol: {row[2].get()}")
 
-        # Generate or update the image (assuming this is your function to generate/update the image)
+    if all_filled:
+        fa = FiniteAutomaton()
+        error_label.configure(text="")
+        
+        start_state = starter[0].get()
+        accept_state = starter[1].get()
+        print("Start State:", start_state)
+        print("Final State:", accept_state)
+        
+        fa.add_state(start_state, start=True)
+        fa.add_state(accept_state, accept=True)
+        
+        for row in entries:
+            from_state = row[0].get()
+            to_state = row[1].get()
+            symbol = row[2].get()
+            print(f"State: {from_state}, TO State: {to_state}, Symbol: {symbol}")
+            fa.add_transition(from_state, to_state, symbol)
+
+        # Generate or update the image
+        fa.to_graph("nfa.png")
         update_image()
+
 
 
 def update_image():
