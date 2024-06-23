@@ -11,6 +11,8 @@ frame = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
 frame.pack(expand=True, fill='both')
 frame.grid(row=0, column=0, padx=10, pady=10)
 
+
+
 #Frame image kon kam jea
 frameimg = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
 frameimg.grid(row=0, column=1, padx=10, pady=10)
@@ -20,6 +22,7 @@ image = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/nfa.png")
 
 # List to store rows of CTkEntry widgets
 entries = []
+
 
 def onClick():
     all_filled = True
@@ -54,8 +57,7 @@ def onClick():
         # Generate or update the image
         fa.to_graph("nfa.png")
         update_image()
-
-
+    
 
 def update_image():
     global label
@@ -66,10 +68,6 @@ def update_image():
     label = CTkLabel(master=frameimg, image=new_image)
     label.image = new_image  # Keep a reference to prevent garbage collection
     label.pack()
-
-
-        
-
 
 
             
@@ -84,22 +82,42 @@ def addRow():
     else : 
        row_entries = []
        state = CTkEntry(master=frame, placeholder_text="state..")
-       state.grid(row=count, column=0, padx=10, pady=10)  # Use grid for entries
-       row_entries.append(state)  # Store the entry reference in the list
+       state.grid(row=count, column=0, padx=10, pady=10)  
+       row_entries.append(state)  
 
        tostate = CTkEntry(master=frame, placeholder_text="to...")
-       tostate.grid(row=count, column=1, padx=10, pady=10)  # Use grid for entries
-       row_entries.append(tostate)  # Store the entry reference in the list
+       tostate.grid(row=count, column=1, padx=10, pady=10) 
+       row_entries.append(tostate) 
 
        symbol = CTkEntry(master=frame, placeholder_text="symbol..")
-       symbol.grid(row=count, column=2, padx=10, pady=10)  # Use grid for entries
-       row_entries.append(symbol)  # Store the entry reference in the list
+       symbol.grid(row=count, column=2, padx=10, pady=10)  
+       row_entries.append(symbol)  
 
-       entries.append(row_entries)  # Add the row of entries to the main list
-       
+       entries.append(row_entries)  
+
+
+
+def deleteRow():
+    global count
+    if count > 2:   
+        last_row = entries.pop()  
+        for entry in last_row:
+            entry.destroy()  
+        count -= 1 
+        print(count) 
+        error_label.configure(text="")  
+    else:
+        error_label.configure(text="No more rows to delete.")  
+
+def resetAll():
+    global app
+    app.destroy()  # Destroy the current instance of the application
+    app = CTk()  # Create a new instance of the application
+    app.geometry("1080x720")
+    app.title("Automata")
+    app.mainloop()  # Start the main loop of the application
+
 #this is the starting of the app
-
-
 start_final_frame = CTkFrame(master=frame, border_color="black", width=200)
 start_final_frame.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
 
@@ -146,7 +164,7 @@ entries.append(initial_row)
 
 # Create the error label
 error_label = CTkLabel(master=frame, text="", text_color="red")
-error_label.grid(row=12, column=0, padx=10, pady=10)
+error_label.grid(row=13, column=0, padx=10, pady=10)
 # Create the buttons
 
 add_row_button = CTkButton(master=frame, text="Add row", command=addRow)
@@ -154,5 +172,12 @@ add_row_button.grid(row=12, column=1, columnspan=1, pady=20)
 
 enter_button = CTkButton(master=frame, text="Enter", command=onClick)
 enter_button.grid(row=12, column=2, columnspan=2, pady=20)
+
+delete_row_button = CTkButton(master=frame, text="Delete row", command=deleteRow)
+delete_row_button.grid(row=12, column=0, columnspan=1, pady=20)
+
+# Reset button
+reset_button = CTkButton(master=frame, text="Reset", command=resetAll)
+reset_button.grid(row=13, column=2, padx=10, pady=10, sticky='ne')
 
 app.mainloop()
