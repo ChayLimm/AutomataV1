@@ -17,7 +17,13 @@ frame.grid(row=0, column=0, padx=10, pady=10)
 frameimg = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
 frameimg.grid(row=0, column=1, padx=10, pady=10)
 
+#dfa frame
+framedfa = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
+framedfa.grid(row=0, column=2, padx=10, pady=10)
+
 image = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/nfa.png")
+imagedfa = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/dfa.png")
+
 
 
 # List to store rows of CTkEntry widgets
@@ -56,6 +62,8 @@ def onClick():
 
         # Generate or update the image
         fa.to_graph("nfa.png")
+        dfa = fa.nfa_to_dfa()
+        dfa.to_graph('dfa.png')        
         update_image()
     
 
@@ -69,7 +77,15 @@ def update_image():
     label.image = new_image  # Keep a reference to prevent garbage collection
     label.pack()
 
-
+def update_imagedfa():
+    global labeldfa 
+    new_image_pathdfa = "dfa.png"  # Update this with the path to the new image
+    new_imagedfa = tkinter.PhotoImage(file=new_image_pathdfa)
+    if labeldfa:
+        labeldfa.destroy()  # Destroy the previous label if it exists
+    labeldfa = CTkLabel(master=framedfa, image=new_imagedfa)
+    labeldfa.image = new_imagedfa  # Keep a reference to prevent garbage collection
+    labeldfa.pack()
             
 count = 2
 def addRow():
@@ -144,6 +160,7 @@ label2 = CTkLabel(master=frame, text="Symbol")
 label2.grid(row=1, column=2, padx=10, pady=10)
 
 
+labeldfa = CTkLabel(master=framedfa)
 
 # Create initial set of entry widgets
 initial_row = []
@@ -176,8 +193,13 @@ enter_button.grid(row=12, column=2, columnspan=2, pady=20)
 delete_row_button = CTkButton(master=frame, text="Delete row", command=deleteRow)
 delete_row_button.grid(row=12, column=0, columnspan=1, pady=20)
 
+#dfa button
+dfa_button = CTkButton(master=frame, text="Convert to DFA", command=update_imagedfa)
+dfa_button.grid(row=13, column=1, padx=10, pady=10, sticky='ne')
+
 # Reset button
 reset_button = CTkButton(master=frame, text="Reset", command=resetAll)
 reset_button.grid(row=13, column=2, padx=10, pady=10, sticky='ne')
+
 
 app.mainloop()
