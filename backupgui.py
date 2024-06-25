@@ -11,8 +11,6 @@ frame = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
 frame.pack(expand=True, fill='both')
 frame.grid(row=0, column=0, padx=10, pady=10)
 
-
-
 #Frame image kon kam jea
 frameimg = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
 frameimg.grid(row=0, column=1, padx=10, pady=10)
@@ -28,9 +26,10 @@ imagedfa = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/dfa.png")
 
 # List to store rows of CTkEntry widgets
 entries = []
-
+fa = NONE
 
 def onClick():
+    global fa
     all_filled = True
     for row in entries:
         for entry in row:
@@ -65,6 +64,8 @@ def onClick():
         dfa = fa.nfa_to_dfa()
         dfa.to_graph('dfa.png')        
         update_image()
+        #update deterministic
+        test_derministic()
     
 
 def update_image():
@@ -78,9 +79,19 @@ def update_image():
     label.pack()
 
 def update_imagedfa():
-    global labeldfa 
-    new_image_pathdfa = "dfa.png"  # Update this with the path to the new image
-    new_imagedfa = tkinter.PhotoImage(file=new_image_pathdfa)
+    all_filled = True
+    for row in entries:
+        for entry in row:
+            if not entry.get():
+                error_label.configure(text="All fields must be filled.")
+                all_filled = False
+                break
+        if not all_filled:
+            break
+    if all_filled:
+        global labeldfa 
+        new_image_pathdfa = "dfa.png"  # Update this with the path to the new image
+        new_imagedfa = tkinter.PhotoImage(file=new_image_pathdfa)
     if labeldfa:
         labeldfa.destroy()  # Destroy the previous label if it exists
     labeldfa = CTkLabel(master=framedfa, image=new_imagedfa)
@@ -133,6 +144,10 @@ def resetAll():
     app.title("Automata")
     app.mainloop()  # Start the main loop of the application
 
+def test_derministic():
+    
+    print(fa.is_deterministic())
+
 #this is the starting of the app
 start_final_frame = CTkFrame(master=frame, border_color="black", width=200)
 start_final_frame.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
@@ -181,7 +196,7 @@ entries.append(initial_row)
 
 # Create the error label
 error_label = CTkLabel(master=frame, text="", text_color="red")
-error_label.grid(row=13, column=0, padx=10, pady=10)
+error_label.grid(row=14, column=0, padx=10, pady=10)
 # Create the buttons
 
 add_row_button = CTkButton(master=frame, text="Add row", command=addRow)
@@ -193,6 +208,10 @@ enter_button.grid(row=12, column=2, columnspan=2, pady=20)
 delete_row_button = CTkButton(master=frame, text="Delete row", command=deleteRow)
 delete_row_button.grid(row=12, column=0, columnspan=1, pady=20)
 
+# Deterministic
+deterministic= CTkButton(master=frame, text="Test deterministic", command=test_derministic)
+deterministic.grid(row=13, column=0, padx=10, pady=10, sticky='ne')
+
 #dfa button
 dfa_button = CTkButton(master=frame, text="Convert to DFA", command=update_imagedfa)
 dfa_button.grid(row=13, column=1, padx=10, pady=10, sticky='ne')
@@ -200,6 +219,8 @@ dfa_button.grid(row=13, column=1, padx=10, pady=10, sticky='ne')
 # Reset button
 reset_button = CTkButton(master=frame, text="Reset", command=resetAll)
 reset_button.grid(row=13, column=2, padx=10, pady=10, sticky='ne')
+
+
 
 
 app.mainloop()

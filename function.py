@@ -3,7 +3,7 @@ from collections import defaultdict
 from itertools import combinations
 
 class FiniteAutomaton:
-
+        
     def __init__(self):
         self.states = set()
         self.alphabet = set()
