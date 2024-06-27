@@ -1,13 +1,13 @@
-import pygraphviz as pgv
+from graphviz import Digraph
 from collections import defaultdict
 from itertools import combinations
 
 class FiniteAutomaton:
-
+        
     def __init__(self):
         self.states = set()
         self.alphabet = set()
-        self.transitions = {}
+        self.transitions = defaultdict(lambda: defaultdict(set))
         self.start_state = None
         self.accept_states = set()
 
@@ -23,29 +23,28 @@ class FiniteAutomaton:
             print("Error: from_state, to_state, and symbol must all be non-null and non-empty.")
             return 
 
-        if from_state not in self.transitions:
-            self.transitions[from_state] = {}
-        if symbol not in self.transitions[from_state]:
-            self.transitions[from_state][symbol] = set()
         self.transitions[from_state][symbol].add(to_state)
         self.alphabet.add(symbol)
 
     def to_graph(self, filename):
-        graph = pgv.AGraph(directed=True)
+        dot = Digraph(format='png')
+        
         for state in self.states:
             if state in self.accept_states:
-                graph.add_node(state, shape='doublecircle')
+                dot.node(state, shape='doublecircle')
             else:
-                graph.add_node(state)
+                dot.node(state)
+        
         for from_state, paths in self.transitions.items():
             for symbol, to_states in paths.items():
                 for to_state in to_states:
-                    graph.add_edge(from_state, to_state, label=symbol)
+                    dot.edge(from_state, to_state, label=symbol)
+        
         if self.start_state:
-            graph.add_node('start', shape='plaintext', label='')
-            graph.add_edge('start', self.start_state)
-        graph.layout(prog='dot')
-        graph.draw(filename)
+            dot.node('start', shape='plaintext', label='')
+            dot.edge('start', self.start_state)
+        
+        dot.render(filename)
 
     def is_deterministic(self):
         for state, transitions in self.transitions.items():
@@ -59,7 +58,7 @@ class FiniteAutomaton:
         for symbol in string:
             next_states = set()
             for state in current_states:
-                if state in self.transitions and symbol in self.transitions[state]:
+                if symbol in self.transitions[state]:
                     next_states.update(self.transitions[state][symbol])
             current_states = next_states
         return bool(current_states & self.accept_states)
@@ -78,7 +77,7 @@ class FiniteAutomaton:
             for symbol in self.alphabet:
                 next_states = set()
                 for state in current:
-                    if state in self.transitions and symbol in self.transitions[state]:
+                    if symbol in self.transitions[state]:
                         next_states.update(self.transitions[state][symbol])
                 if not next_states:
                     continue
@@ -101,7 +100,7 @@ class FiniteAutomaton:
         while W:
             A = W.pop()
             for symbol in self.alphabet:
-                X = {state for state in self.states if state in self.transitions and symbol in self.transitions[state] and self.transitions[state][symbol] & A}
+                X = {state for state in self.states if symbol in self.transitions[state] and self.transitions[state][symbol] & A}
                 new_P = []
                 for Y in P:
                     intersection = X & Y
@@ -128,28 +127,27 @@ class FiniteAutomaton:
             minimized_dfa.add_state(state_name, start=bool(self.start_state in block), accept=bool(block & self.accept_states))
         
         for state in self.states:
-            if state in self.transitions:
-                for symbol, next_states in self.transitions[state].items():
-                    for next_state in next_states:
-                        minimized_dfa.add_transition(state_map[state], state_map[next_state], symbol)
+            for symbol, next_states in self.transitions[state].items():
+                for next_state in next_states:
+                    minimized_dfa.add_transition(state_map[state], state_map[next_state], symbol)
         
         return minimized_dfa
 
-#A Example usage:
+# Example usage:
 fa = FiniteAutomaton()
 fa.add_state('q0', start=True)
 fa.add_state('q1', accept=True)
-fa.add_transition('q0', 'q1', 'a/b')
-fa.add_transition('q1', 'q0', '')
+fa.add_transition('q0', 'q1', 'a')
+fa.add_transition('q1', 'q0', 'b')
 fa.to_graph('finite_automaton.png')
 
-print(fa.is_deterministic())  #B Example usage
+print(fa.is_deterministic())
 
-print(fa.accepts_string('ab'))  #C Example usage
-print(fa.accepts_string('aa'))  #D Example usage
+print(fa.accepts_string('ab'))
+print(fa.accepts_string('aa'))
 
 dfa = fa.nfa_to_dfa()
 dfa.to_graph('dfa.png')
 
-min_dfa = dfa.minimize_dfa() #e Example usage
+min_dfa = dfa.minimize_dfa()
 min_dfa.to_graph('minimized_dfa.png')
