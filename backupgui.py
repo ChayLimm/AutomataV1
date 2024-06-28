@@ -21,8 +21,8 @@ frameimg.grid(row=0, column=2, padx=20, pady=20, sticky="nsew")
 framedfa = CTkFrame(master=app, fg_color="#FAF9F6", height=10, width=10)
 framedfa.grid(row=0, column=3, padx=20, pady=20, sticky="nsew")
 
-image = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/nfa.png")
-imagedfa = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/dfa.png")
+# image = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/nfa.png")
+# imagedfa = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/dfa.png")
 
 
 
@@ -44,8 +44,6 @@ def onClick():
 
     if all_filled:
         fa = FiniteAutomaton()
-        error_label.configure(text="")
-        
         start_state = starter[0].get()
         accept_state = starter[1].get()
         print("Start State:", start_state)
@@ -104,7 +102,7 @@ count = 3
 def addRow():
     global count
     print(count)
-    if count >= 2+20: #2 is default
+    if count >= 2+18: #2 is default
         error_label.configure(text="Row maximun 10")
         return
     else : 
