@@ -5,6 +5,7 @@ from function import *
 # List to store rows of CTkEntry widgets
 entries = []
 fa = NONE
+count = 3
 
 
 def onClick():
@@ -44,7 +45,6 @@ def onClick():
         #update deterministic
         test_derministic()
     
-
 def update_image():
     global label
     new_image_path = "nfa.png"  # Update this with the path to the new image
@@ -75,7 +75,6 @@ def update_imagedfa():
     labeldfa.image = new_imagedfa  # Keep a reference to prevent garbage collection
     labeldfa.pack()
             
-count = 3
 def addRow():
     global count
     print(count)
@@ -99,9 +98,6 @@ def addRow():
        entries.append(row_entries)  
        count += 1
 
-
-
-
 def deleteRow():
     global count
     if count > 3:   
@@ -123,13 +119,18 @@ def resetAll():
     app.mainloop()  # Start the main loop of the application
 
 def test_derministic():
-    
     print(fa.is_deterministic())
 
 app = CTk()
 app.geometry("1080x720")
 app.title("Automata")
 
+#answer frame
+
+frameAns = CTkFrame(master=app, fg_color="#424949", height=100, width=100)
+frameAns.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
+
+#button frame
 frameBtn = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
 frameBtn.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
@@ -139,11 +140,11 @@ frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
 #Frame image kon kam jea
 frameimg = CTkFrame(master=app, fg_color="#FAF9F6", height=10, width=10)
-frameimg.grid(row=0, column=2, padx=20, pady=20, sticky="nsew")
+frameimg.grid(row=1, column=2, padx=20, pady=20, sticky="nsew")
 
 #dfa frame
 framedfa = CTkFrame(master=app, fg_color="#FAF9F6", height=10, width=10)
-framedfa.grid(row=0, column=3, padx=20, pady=20, sticky="nsew")
+framedfa.grid(row=1, column=3, padx=20, pady=20, sticky="nsew")
 
 #this is the starting of the app
 start_final_frame = CTkFrame(master=frame, border_color="black", width=200)
@@ -218,6 +219,5 @@ reset_button.grid(row=5, column=0, padx=10, pady=10, sticky='ne')
 # Create the error label
 error_label = CTkLabel(master=frameBtn, text="", text_color="red")
 error_label.grid(row=6, column=0, padx=10, pady=10)
-
 
 app.mainloop()
