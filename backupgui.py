@@ -2,33 +2,10 @@ from customtkinter import *
 import tkinter
 from function import *
 
-app = CTk()
-app.geometry("1080x720")
-app.title("Automata")
-
-frameBtn = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
-frameBtn.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
-
-# Frame input
-frame = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
-frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
-
-#Frame image kon kam jea
-frameimg = CTkFrame(master=app, fg_color="#FAF9F6", height=10, width=10)
-frameimg.grid(row=0, column=2, padx=20, pady=20, sticky="nsew")
-
-#dfa frame
-framedfa = CTkFrame(master=app, fg_color="#FAF9F6", height=10, width=10)
-framedfa.grid(row=0, column=3, padx=20, pady=20, sticky="nsew")
-
-# image = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/nfa.png")
-# imagedfa = tkinter.PhotoImage(file="/home/chaylim/Documents/AutomataV1/dfa.png")
-
-
-
 # List to store rows of CTkEntry widgets
 entries = []
 fa = NONE
+
 
 def onClick():
     global fa
@@ -148,6 +125,25 @@ def resetAll():
 def test_derministic():
     
     print(fa.is_deterministic())
+
+app = CTk()
+app.geometry("1080x720")
+app.title("Automata")
+
+frameBtn = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
+frameBtn.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+# Frame input
+frame = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
+frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
+#Frame image kon kam jea
+frameimg = CTkFrame(master=app, fg_color="#FAF9F6", height=10, width=10)
+frameimg.grid(row=0, column=2, padx=20, pady=20, sticky="nsew")
+
+#dfa frame
+framedfa = CTkFrame(master=app, fg_color="#FAF9F6", height=10, width=10)
+framedfa.grid(row=0, column=3, padx=20, pady=20, sticky="nsew")
 
 #this is the starting of the app
 start_final_frame = CTkFrame(master=frame, border_color="black", width=200)
