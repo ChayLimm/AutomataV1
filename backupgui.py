@@ -123,7 +123,10 @@ def test_derministic():
 
 def functionteststring():
     string = test_string[0].get()
-    fa.accepts_string(string)
+    if(fa.accepts_string(string)):
+        string_accepted_label.configure(text="String accepted",text_color="green")
+        return
+    string_accepted_label.configure(text="Not accepted",text_color="red")
 
 app = CTk()
 app.geometry("1080x720")
@@ -235,11 +238,27 @@ error_label.grid(row=6, column=0, padx=10, pady=10)
 
 ##testing string
 test_string = []
-string = CTkEntry(master=acceptionframe, placeholder_text="test string")
+string = CTkEntry(master=acceptionframe, placeholder_text="test string",width=200, 
+    height=40)
 string.grid(row=0, column=0, padx=10, pady=10)
 test_string.append(string)
 
-enter_button_teststring = CTkButton(master=acceptionframe, text="Test", command=functionteststring)
-enter_button_teststring.grid(row=0, column=1, columnspan=2, pady=10, padx =10)
+enter_button_teststring = CTkButton(
+    master=acceptionframe,
+    text="Test",
+    command=functionteststring, 
+    width=200, 
+    height=40)
+enter_button_teststring.grid(row=1, column=0, columnspan=2, pady=10, padx =10)
+
+string_accepted_label = CTkLabel(
+    master=acceptionframe, 
+    text="Test if the string accept or not",
+    fg_color="#424949",
+    corner_radius=10,  # Border radius
+    width=200,  # Width of the label
+    height=40  # Height of the label
+)
+string_accepted_label.grid(row=0, column=1, padx=10, pady=10)
 
 app.mainloop()
