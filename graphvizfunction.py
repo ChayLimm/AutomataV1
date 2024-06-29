@@ -134,20 +134,20 @@ class FiniteAutomaton:
         return minimized_dfa
 
 # Example usage:
-fa = FiniteAutomaton()
-fa.add_state('q0', start=True)
-fa.add_state('q1', accept=True)
-fa.add_transition('q0', 'q1', 'a')
-fa.add_transition('q1', 'q0', 'b')
-fa.to_graph('finite_automaton.png')
+# fa = FiniteAutomaton()
+# fa.add_state('q0', start=True)
+# fa.add_state('q1', accept=True)
+# fa.add_transition('q0', 'q1', 'a')
+# fa.add_transition('q1', 'q0', 'b')
+# fa.to_graph('finite_automaton.png')
 
-print(fa.is_deterministic())
+# print(fa.is_deterministic())
 
-print(fa.accepts_string('ab'))
-print(fa.accepts_string('aa'))
+# print(fa.accepts_string('ab'))
+# print(fa.accepts_string('aa'))
 
-dfa = fa.nfa_to_dfa()
-dfa.to_graph('dfa.png')
+# dfa = fa.nfa_to_dfa()
+# dfa.to_graph('dfa.png')
 
-min_dfa = dfa.minimize_dfa()
-min_dfa.to_graph('minimized_dfa.png')
+# min_dfa = dfa.minimize_dfa()
+# min_dfa.to_graph('minimized_dfa.png')

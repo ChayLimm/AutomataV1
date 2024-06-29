@@ -121,14 +121,27 @@ def resetAll():
 def test_derministic():
     print(fa.is_deterministic())
 
+def functionteststring():
+    string = test_string[0].get()
+    fa.accepts_string(string)
+
 app = CTk()
 app.geometry("1080x720")
 app.title("Automata")
 
-#answer frame
 
+
+#answer frame
 frameAns = CTkFrame(master=app, fg_color="#424949", height=100, width=100)
-frameAns.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
+frameAns.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
+
+#container for image
+container = CTkFrame(master=frameAns, fg_color="white", height=100, width=100)
+container.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
+
+#test acception string
+acceptionframe = CTkFrame(master=frameAns, border_color="black", height=47, width=200)
+acceptionframe.grid(row=0, column=0, padx=10, pady=10, sticky="nsew") 
 
 #button frame
 frameBtn = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
@@ -139,12 +152,12 @@ frame = CTkFrame(master=app, fg_color="#424949", height=10, width=10)
 frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
 #Frame image kon kam jea
-frameimg = CTkFrame(master=app, fg_color="#FAF9F6", height=10, width=10)
-frameimg.grid(row=1, column=2, padx=20, pady=20, sticky="nsew")
+frameimg = CTkFrame(master=container, fg_color="#FAF9F6", height=10, width=10)
+frameimg.grid(row=2, column=0, padx=20, pady=20, sticky="nsew")
 
 #dfa frame
-framedfa = CTkFrame(master=app, fg_color="#FAF9F6", height=10, width=10)
-framedfa.grid(row=1, column=3, padx=20, pady=20, sticky="nsew")
+framedfa = CTkFrame(master=container, fg_color="#FAF9F6", height=10, width=10)
+framedfa.grid(row=2, column=1, padx=20, pady=20, sticky="nsew")
 
 #this is the starting of the app
 start_final_frame = CTkFrame(master=frame, border_color="black", width=200)
@@ -219,5 +232,14 @@ reset_button.grid(row=5, column=0, padx=10, pady=10, sticky='ne')
 # Create the error label
 error_label = CTkLabel(master=frameBtn, text="", text_color="red")
 error_label.grid(row=6, column=0, padx=10, pady=10)
+
+##testing string
+test_string = []
+string = CTkEntry(master=acceptionframe, placeholder_text="test string")
+string.grid(row=0, column=0, padx=10, pady=10)
+test_string.append(string)
+
+enter_button_teststring = CTkButton(master=acceptionframe, text="Test", command=functionteststring)
+enter_button_teststring.grid(row=0, column=1, columnspan=2, pady=10, padx =10)
 
 app.mainloop()

@@ -62,9 +62,10 @@ class FiniteAutomaton:
                 if state in self.transitions and symbol in self.transitions[state]:
                     next_states.update(self.transitions[state][symbol])
             current_states = next_states
-        return bool(current_states & self.accept_states)
+        if(current_states & self.accept_states):
+             print("string accepted")
 
-    def nfa_to_dfa(self):
+    def nfa_to_dfa(self):   
         dfa = FiniteAutomaton()
         start_state = frozenset([self.start_state])
         states_map = {start_state: 'q0'}
