@@ -32,7 +32,8 @@ def onClick():
         
         fa.add_state(start_state, start=True)
         fa.add_state(accept_state, accept=True)
-        
+        label1 = CTkLabel(master=frame, text="TO State")
+        label1.grid(row=1, column=1, padx=10, pady=10)
         for row in entries:
             from_state = row[0].get()
             to_state = row[1].get()
@@ -59,19 +60,31 @@ def update_image():
     label.pack()
 
 def minimizedfa():
-    global labelmin
+    all_filled = True
+    for row in entries:
+        for entry in row:
+            if not entry.get():
+                error_label.configure(text="All fields must be filled.")
+                all_filled = False
+                break
+        if not all_filled:
+            break
 
-    new_image_path = "mindfa.png"  # Update this with the path to the new image
-    new_image = tkinter.PhotoImage(file=new_image_path)
-    if labelmin:
-        labelmin.destroy()  # Destroy the previous labelmin if it exists
-    labelmin = CTkLabel(master=framemini, image=new_image, text="")
-    labelmin.image = new_image  # Keep a reference to prevent garbage collection
-    labelmin.pack()
+    if all_filled:
+        global labelmin
+
+        new_image_path = "mindfa.png"  # Update this with the path to the new image
+        new_image = tkinter.PhotoImage(file=new_image_path)
+        if labelmin:
+            labelmin.destroy()  # Destroy the previous labelmin if it exists
+        labelmin = CTkLabel(master=framemini, image=new_image, text="")
+        labelmin.image = new_image  # Keep a reference to prevent garbage collection
+        labelmin.pack()
 
 def update_imagedfa():
     global labeldfa
-
+    labeldfa = CTkLabel(master=container, text="DFA", width=100, height=40,fg_color="#FAF9F6", corner_radius=5)
+    labeldfa.grid(row=1, column=1, padx=10, pady=10)
     # Check if all fields are filled
     all_filled = True
     for row in entries:
@@ -133,23 +146,23 @@ def resetAll():
 def test_deterministic():
     global fa
     if fa and fa.is_deterministic():
-        string_accepted_label.configure(text="Deterministic", text_color="green")
+        string_accepted_label.configure(text="Deterministic", text_color="#FAF9F6")
     else:
-        string_accepted_label.configure(text="NOT Deterministic", text_color="red")
+        string_accepted_label.configure(text="NOT Deterministic", text_color="#424949")
 
 def functionteststring():
     global fa
     if fa:
         string = test_string[0].get()
         if fa.accepts_string(string):
-            string_accepted_label.configure(text="String accepted", text_color="green")
+            string_accepted_label.configure(text="String accepted", text_color="#FAF9F6")
         else:
-            string_accepted_label.configure(text="Not accepted", text_color="red")
+            string_accepted_label.configure(text="Not accepted", text_color="#FAF9F6")
     else:
         error_label.configure(text="Please create automaton first.")
 
 def main():
-    global app, label, labeldfa, labelmin, frameimg, framedfa, framemini, frame, frameBtn, error_label, test_string, starter, string_accepted_label
+    global app, label, labeldfa, labelmin, frameimg, framedfa, framemini, frame, frameBtn, error_label, test_string, starter, string_accepted_label, container, label1
 
     app = CTk()
     app.geometry("2160x1080")
@@ -160,7 +173,7 @@ def main():
     frameAns.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
 
     # Container for image
-    container = CTkFrame(master=frameAns, fg_color="red")
+    container = CTkFrame(master=frameAns, fg_color="#424949")
     container.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
 
     # Test acception string
@@ -175,17 +188,24 @@ def main():
     frame = CTkFrame(master=app, fg_color="#424949")
     frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
+    labelfa = CTkLabel(master=container, text="Fa", width=100, height=40, fg_color="#2b2b2b", corner_radius=5)
+    labelfa.grid(row=1, column=0, padx=10, pady=10)
+    labeldfa = CTkLabel(master=container, text="DFA", width=100, height=40,fg_color="#2b2b2b", corner_radius=5)
+    labeldfa.grid(row=1, column=1, padx=10, pady=10)
+    labelmindfa = CTkLabel(master=container, text="Minimized DFA", width=120, height=40,fg_color="#2b2b2b", corner_radius=5)
+    labelmindfa.grid(row=1, column=2, padx=10, pady=10)
+
     # Frame image
     frameimg = CTkFrame(master=container, fg_color="#FAF9F6")
-    frameimg.grid(row=2, column=0, padx=20, pady=20, sticky="nsew")
+    frameimg.grid(row=3, column=0, padx=20, pady=20, sticky="nsew")
 
     # DFA frame
     framedfa = CTkFrame(master=container, fg_color="#FAF9F6")
-    framedfa.grid(row=2, column=1, padx=20, pady=20, sticky="nsew")
+    framedfa.grid(row=3, column=1, padx=20, pady=20, sticky="nsew")
 
     # Minimize DFA frame
     framemini = CTkFrame(master=container, fg_color="#FAF9F6")
-    framemini.grid(row=2, column=2, padx=20, pady=20, sticky="nsew")
+    framemini.grid(row=3, column=2, padx=20, pady=20, sticky="nsew")
 
     # Starting of the app
     start_final_frame = CTkFrame(master=frame, border_color="black")
@@ -265,12 +285,12 @@ def main():
     test_string.append(string)
 
     enter_button_teststring = CTkButton(master=acceptionframe, text="Test", command=functionteststring, width=60, height=40)
-    enter_button_teststring.grid(row=0, column=0, pady=3, padx=3)
+    enter_button_teststring.grid(row=0, column=0, pady=10, padx=10)
 
     answer_state = CTkLabel(master=acceptionframe, text="Answer : ")
     answer_state.grid(row=1, column=0, padx=15, pady=15)
 
-    string_accepted_label = CTkLabel(master=acceptionframe, text="Test if the string accept or not", fg_color="#424949")
+    string_accepted_label = CTkLabel(master=acceptionframe, text="Test if the string accept or not", fg_color="#424949", padx=10, pady=10, corner_radius= 5)
     string_accepted_label.grid(row=1, column=1, padx=10, pady=10)
 
     app.mainloop()
